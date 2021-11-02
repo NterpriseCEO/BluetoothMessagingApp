@@ -3,6 +3,7 @@ package com.example.bluetoothmessagingapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -41,7 +42,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -77,16 +77,23 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
 
-        Button takePictureButton = findViewById(R.id.btn_takepicture);
+        Button takePictureButton = findViewById(R.id.takePictureButton);
         assert takePictureButton != null;
         takePictureButton.setOnClickListener(this);
+
+        Button goBack = findViewById(R.id.goBackCamera);
+        goBack.setOnClickListener(this);
 
         Objects.requireNonNull(getSupportActionBar()).hide();
     }
 
     @Override
     public void onClick(View view) {
-        takePicture();
+        if(view.getId() == R.id.takePictureButton) {
+            takePicture();
+        }else if(view.getId() == R.id.goBackCamera) {
+            finish();
+        }
     }
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
@@ -191,9 +198,14 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
-            file = new File(Environment.getExternalStorageDirectory()+"/userProfile.jpg");
+            File folder = new File(Environment.getExternalStorageDirectory()+"/bluetoothMessenger");
+            if(folder.mkdir()) {
+                Log.e(TAG, "Folder created");
+            }else {
+                Log.e(TAG, "Folder wasn't created");
+            }
+            file = new File(Environment.getExternalStorageDirectory()+"/bluetoothMessenger/userProfile_temp.jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
-
                 @Override
                 public void onImageAvailable(ImageReader imageReader) {
                     try (Image image = reader.acquireLatestImage()) {
@@ -201,6 +213,9 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         save(bytes);
+                        //Go to the image preview page
+                        Intent gotToPreview = new Intent(CameraActivity.this, ConfirmProfileActivity.class);
+                        startActivity(gotToPreview);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -254,7 +269,6 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
             captureRequestBuilder.addTarget(surface);
 
             cameraDevice.createCaptureSession(Collections.singletonList(surface), new CameraCaptureSession.StateCallback() {
-
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                     if(cameraDevice == null) {

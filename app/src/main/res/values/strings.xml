@@ -4,4 +4,9 @@
     <string name="usernameInput">Name</string>
     <string name="setUsername">Go</string>
     <string name="enter_username">Enter Username</string>
+    <string name="goBackCamera">Back</string>
+    <string name="likeUserProfile">Do you like this picture?</string>
+    <string name="retakePhoto">Retake</string>
+    <string name="confirmPhoto">Confirm</string>
+    <string name="skipInstructions">Skip Instructions</string>
 </resources>
