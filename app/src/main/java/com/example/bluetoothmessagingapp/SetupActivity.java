@@ -46,8 +46,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         confirmUsername = findViewById(R.id.confirmUsername);
         confirmUsername.setOnClickListener(this);
         confirmUsername.setEnabled(false); // Disable by default
-
-        Objects.requireNonNull(getSupportActionBar()).hide();
     }
 
     @Override

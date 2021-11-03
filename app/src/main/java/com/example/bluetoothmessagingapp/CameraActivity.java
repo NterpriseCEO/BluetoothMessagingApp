@@ -83,8 +83,6 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
 
         Button goBack = findViewById(R.id.goBackCamera);
         goBack.setOnClickListener(this);
-
-        Objects.requireNonNull(getSupportActionBar()).hide();
     }
 
     @Override
@@ -294,7 +292,7 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
         Log.e(TAG, "camera is open");
 
         try {
-            String cameraID = manager.getCameraIdList()[0];
+            String cameraID = manager.getCameraIdList()[1];
 
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraID);
 
