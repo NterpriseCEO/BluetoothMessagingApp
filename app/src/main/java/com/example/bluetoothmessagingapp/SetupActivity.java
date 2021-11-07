@@ -3,9 +3,11 @@ package com.example.bluetoothmessagingapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Objects;
+import com.example.bluetoothmessagingapp.database.DatabaseFunctions;
 
 public class SetupActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
@@ -57,6 +59,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         }else if(view.getId() == R.id.confirmUsername) {
             //Go to the camera page when clicked
             Intent gotToCamera = new Intent(this, CameraActivity.class);
+            gotToCamera.putExtra("username", enterUsername.getText());
             startActivity(gotToCamera);
         }
     }

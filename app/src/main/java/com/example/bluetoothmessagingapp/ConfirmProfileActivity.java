@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.bluetoothmessagingapp.database.DatabaseFunctions;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -100,9 +102,20 @@ public class ConfirmProfileActivity extends AppCompatActivity implements View.On
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //Goes to the instructions page
-            Intent goToInstructions =  new Intent(ConfirmProfileActivity.this, InstructionsActivity.class);
-            startActivity(goToInstructions);
+            //If the username is not null - indicates first time setup of the app
+            if(getIntent().getStringExtra("username") != null) {
+                //Sets the local users details
+                this.insertLocalUser();
+                //Goes to the instructions page
+                Intent goToInstructions =  new Intent(ConfirmProfileActivity.this, InstructionsActivity.class);
+                startActivity(goToInstructions);
+            }else {
+                //Goes back to the settings
+                Intent goToSettings = new Intent(ConfirmProfileActivity.this, SettingsActivity.class);
+                //Clears all activities back to the last known instance of the settings activity
+                goToSettings.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(goToSettings);
+            }
         }
     }
     //Saves the profile iamge
@@ -133,5 +146,12 @@ public class ConfirmProfileActivity extends AppCompatActivity implements View.On
             output.close();
             profileTemp.delete();
         }
+    }
+
+    public void insertLocalUser() {
+        DatabaseFunctions db = new DatabaseFunctions(this);
+        db.open();
+        db.insertUser(String.valueOf(getIntent().getStringExtra("username")), 1);
+        db.close();
     }
 }

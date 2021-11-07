@@ -9,13 +9,22 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleTextColor="@color/black"
+        android:background="@color/orange"
+        android:minHeight="?attr/actionBarSize"
         app:title="Chats"
-        android:background="@color/purple_200">
-    </androidx.appcompat.widget.Toolbar>
+        app:titleTextColor="@color/black"></androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/noChats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:text="@string/noChats"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatsList"

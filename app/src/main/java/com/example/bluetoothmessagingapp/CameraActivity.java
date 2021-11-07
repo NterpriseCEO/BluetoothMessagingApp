@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -36,6 +37,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.bluetoothmessagingapp.database.DatabaseFunctions;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -72,6 +76,7 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
 
         textureView = findViewById(R.id.texture);
         assert textureView != null;
@@ -213,6 +218,7 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
                         save(bytes);
                         //Go to the image preview page
                         Intent gotToPreview = new Intent(CameraActivity.this, ConfirmProfileActivity.class);
+                        gotToPreview.putExtra("username", getIntent().getStringExtra("username"));
                         startActivity(gotToPreview);
                     } catch (IOException e) {
                         e.printStackTrace();

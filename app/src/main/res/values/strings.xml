@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Messaging App</string>
+    <string name="app_name">Gormsson.io Bluetooth messaging</string>
     <string name="clearUsername">Clear</string>
     <string name="usernameInput">Name</string>
     <string name="setUsername">Go</string>
@@ -9,4 +9,25 @@
     <string name="retakePhoto">Retake</string>
     <string name="confirmPhoto">Confirm</string>
     <string name="skipInstructions">Skip Instructions</string>
+    <string name="noChats">You are not paired to any phones :(</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="changeUsername">Change Username</string>
+    <string name="changeProfilePicture">Change Profile Picture</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
