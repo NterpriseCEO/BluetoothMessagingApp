@@ -14,6 +14,7 @@ import static com.example.bluetoothmessagingapp.database.DatabaseConnection.*;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -25,7 +26,6 @@ public class DatabaseFunctions  {
 
     public DatabaseFunctions(Context context) {
         this.context = context;
-
     }
 
     public DatabaseFunctions open() throws SQLException {
@@ -40,12 +40,20 @@ public class DatabaseFunctions  {
         connection.close();
     }
 
-    public long insertUser(String username, int localUser) {
+    public long insertUser(String username, String bluetoothID, int localUser) {
         ContentValues values = new ContentValues();
         values.put(KEY_USERNAME, username);
         values.put(KEY_LOCAL_USER, localUser);
-        values.put(KEY_BLUETOOTH_ID,"00:00:00:00:00:00");
+        values.put(KEY_BLUETOOTH_ID, bluetoothID);
         return db.insert(USER_DATABASE_TABLE, null, values);
+    }
+
+    public long insertMessage(String username, String bluetoothID, String message) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_SENT_FROM, username);
+        values.put(KEY_BLUETOOTH_ID, bluetoothID);
+        values.put(KEY_MESSAGE, message);
+        return db.insert(MESSAGES_DATABASE_TABLE, null, values);
     }
 
     //---insert a contact person into the database---
@@ -82,11 +90,11 @@ public class DatabaseFunctions  {
 //    }
 
     //---retrieves the local user (the user associated with this phone)
-    public Cursor getLocalUser() throws SQLException
-    {
+    public Cursor getLocalUser() throws SQLException {
         Cursor cursor =
                 db.query(true, USER_DATABASE_TABLE, new String[] {
                     KEY_USERNAME,
+                    KEY_BLUETOOTH_ID
                 },
                 KEY_LOCAL_USER + "= 1",
                 null,
@@ -100,15 +108,32 @@ public class DatabaseFunctions  {
         return cursor;
     }
 
+    public Cursor getMessages(String bluetoothID) {
+        Cursor cursor = db.query(true, MESSAGES_DATABASE_TABLE, new String[] {
+            KEY_SENT_FROM,
+            KEY_MESSAGE
+        },
+        KEY_BLUETOOTH_ID+" = '"+bluetoothID+"'",
+        null,
+        null,
+        null,
+        null,
+        null);
+
+        return cursor;
+    }
+
     //---updates the username of the local user
-    public boolean updateLocalUser(String newUsername)
-    {
+    public boolean updateLocalUser(String newUsername) {
         ContentValues args = new ContentValues();
         args.put(KEY_USERNAME, newUsername);
-        return db.update(USER_DATABASE_TABLE, args,
-                KEY_LOCAL_USER + "= 1", null) > 0;
+        return db.update(USER_DATABASE_TABLE, args, KEY_LOCAL_USER + "= 1", null) > 0;
+    }
+
+    public boolean updateMessageUsername(String newUsername, String olderUsername) {
+        ContentValues args = new ContentValues();
+        args.put(KEY_SENT_FROM, newUsername);
+        return db.update(MESSAGES_DATABASE_TABLE, args, KEY_SENT_FROM+" = "+ DatabaseUtils.sqlEscapeString(olderUsername), null) > 0;
     }
 
 }
-
-

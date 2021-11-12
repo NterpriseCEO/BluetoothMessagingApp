@@ -28,6 +28,10 @@ public class DatabaseConnection extends SQLiteOpenHelper
     public static final String USER_DATABASE_TABLE = "Users";
     public static final int DATABASE_VERSION = 1;
 
+    public static final String MESSAGES_DATABASE_TABLE = "Messages";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_SENT_FROM = "sent_from";
+
     // This is the string containing the SQL database create statement
     private static final String DATABASE_CREATE =
             "create table " + USER_DATABASE_TABLE  +
@@ -35,6 +39,13 @@ public class DatabaseConnection extends SQLiteOpenHelper
                     KEY_USERNAME+" text not null, " +
                     KEY_BLUETOOTH_ID+" text not null, "  +
                     KEY_LOCAL_USER+" integer not null);";
+
+    private static final String DATABASE2_CREATE =
+            "create table " + MESSAGES_DATABASE_TABLE +
+                    " ("+KEY_ROWID+" integer primary key autoincrement, " +
+                    KEY_MESSAGE+" text not null, " +
+                    KEY_BLUETOOTH_ID+" text not null, "+
+                    KEY_SENT_FROM+" TEXT NOT NULL)";
 
     public DatabaseConnection(Context context)
     {
@@ -47,6 +58,7 @@ public class DatabaseConnection extends SQLiteOpenHelper
     {
 
         db.execSQL(DATABASE_CREATE);
+        db.execSQL(DATABASE2_CREATE);
     }
 
     @Override

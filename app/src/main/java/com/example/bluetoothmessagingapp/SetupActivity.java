@@ -17,11 +17,14 @@ import android.widget.TextView;
 
 import com.example.bluetoothmessagingapp.database.DatabaseFunctions;
 
+import java.util.regex.Pattern;
+
 public class SetupActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     EditText enterUsername;
     Button clearUsername;
     Button confirmUsername;
+    final String pattern = "^(^[a-zA-Z0-9@.#$%^&*_&\\\\/,.\\-\\+=!\"£$%^&*()€])+$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             if((keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) || i == EditorInfo.IME_ACTION_DONE) {
                 //Go to the camera page when done / enter is pressed on the keyboard
                 Intent gotToCamera = new Intent(this, CameraActivity.class);
+                gotToCamera.putExtra("username", enterUsername.getText().toString());
                 startActivity(gotToCamera);
             }
             return false;
@@ -58,8 +62,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             confirmUsername.setEnabled(false);
         }else if(view.getId() == R.id.confirmUsername) {
             //Go to the camera page when clicked
+            enterUsername.setText(enterUsername.getText().toString().replace(pattern, ""));
             Intent gotToCamera = new Intent(this, CameraActivity.class);
-            gotToCamera.putExtra("username", enterUsername.getText());
+            gotToCamera.putExtra("username", enterUsername.getText().toString());
             startActivity(gotToCamera);
         }
     }

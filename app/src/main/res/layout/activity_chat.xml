@@ -10,7 +10,7 @@
         android:id="@+id/chatTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
+        android:background="@color/orange"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,34 +19,41 @@
         app:titleTextColor="@color/black"></androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messages"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/teal_200"
+        android:background="@color/gainsboro"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/chatTitle"
+        tools:listitem="@layout/message" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="69dp"
+        android:background="@color/orange"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/textarea"
             android:layout_width="311dp"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:scrollbarAlwaysDrawVerticalTrack="true"/>
+            android:padding="5dp"
+            android:scrollbarAlwaysDrawVerticalTrack="true" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/send"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

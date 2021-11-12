@@ -2,7 +2,10 @@ package com.example.bluetoothmessagingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -21,9 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Objects;
 
 public class ConfirmProfileActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int REQUEST_ENABLE_BT = 1;
     //File path to the temporary profile image create
     //A temporary image was created so as not to override the current profile image
     File profileTemp = new File(Environment.getExternalStorageDirectory()+"/bluetoothMessenger/userProfile_temp.jpg");
@@ -79,7 +82,7 @@ public class ConfirmProfileActivity extends AppCompatActivity implements View.On
                     rotatedBitmap = bitmap;
             }
             //Sets the source of the imageView to be the new rotated image
-            ImageView preview = findViewById(R.id.profilePreview);
+            ImageView preview = findViewById(R.id.profilePicture);
             preview.setImageBitmap(rotatedBitmap);
         }
     }
@@ -103,6 +106,7 @@ public class ConfirmProfileActivity extends AppCompatActivity implements View.On
                 e.printStackTrace();
             }
             //If the username is not null - indicates first time setup of the app
+            System.out.println("testing this right now dude "+ (getIntent().getStringExtra("username") != null));
             if(getIntent().getStringExtra("username") != null) {
                 //Sets the local users details
                 this.insertLocalUser();
@@ -149,9 +153,19 @@ public class ConfirmProfileActivity extends AppCompatActivity implements View.On
     }
 
     public void insertLocalUser() {
+        //Accesses the bluetoothAdapter
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!bluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            //I refuse to use the "improved" version of this
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+        BluetoothManager manager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         DatabaseFunctions db = new DatabaseFunctions(this);
         db.open();
-        db.insertUser(String.valueOf(getIntent().getStringExtra("username")), 1);
+        db.insertUser(String.valueOf(getIntent().getStringExtra("username")), manager.getAdapter().getAddress(), 1);
+        Cursor c = db.getLocalUser();
+        c.close();
         db.close();
     }
 }

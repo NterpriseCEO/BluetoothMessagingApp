@@ -15,6 +15,7 @@
     <string name="changeProfilePicture">Change Profile Picture</string>
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
+    <string name="signup">Sign Up</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

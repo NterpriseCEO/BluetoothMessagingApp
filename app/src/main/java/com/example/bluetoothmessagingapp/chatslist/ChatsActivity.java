@@ -14,10 +14,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.bluetoothmessagingapp.R;
 import com.example.bluetoothmessagingapp.SettingsActivity;
+import com.example.bluetoothmessagingapp.bluetoothconnections.AcceptThread;
+import com.example.bluetoothmessagingapp.bluetoothconnections.ConnectThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,9 @@ import java.util.Set;
 
 public class ChatsActivity extends AppCompatActivity {
 
-    private List chats = new ArrayList<>();
+    private final List<String[]> chats = new ArrayList<>();
+
+    private final static int REQUEST_ENABLE_BT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,23 @@ public class ChatsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Access the bluetoothAdapter
+        //Accesses the bluetoothAdapter
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(!bluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            //The thing this was replaced with sucks and now I'm stuck with deprecated code
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+
+        //Creates a recyclerView using the chats adapter
+        RecyclerView recyclerView = findViewById(R.id.chatsList);
+        ChatsAdapter chatsAdapter = new ChatsAdapter(chats, ChatsActivity.this);
+
+//        AcceptThread aThread = new AcceptThread(this);
+//        Thread t = new Thread(aThread);
+//        t.start();
+
         //Gets a list of paired devices
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
@@ -45,7 +63,11 @@ public class ChatsActivity extends AppCompatActivity {
         for(BluetoothDevice device: pairedDevices) {
             BluetoothClass bluetoothClass = device.getBluetoothClass();// The type of bluetooth device
             if(bluetoothClass.getDeviceClass() == BluetoothClass.Device.PHONE_SMART) {
-                chats.add(device.getName());
+                chats.add(new String[]{device.getName(), device.getAddress()});
+//                ConnectThread thread = new ConnectThread(device, this);
+//                Thread t2 = new Thread(thread);
+//                t2.start();
+//                thread.getUsername();
             }
         }
         //Shows a message if no chats are available
@@ -54,9 +76,6 @@ public class ChatsActivity extends AppCompatActivity {
             findViewById(R.id.noChats).setVisibility(View.VISIBLE);
         }
 
-        //Creates a recyclerView using the chats adapter
-        RecyclerView recyclerView = findViewById(R.id.chatsList);
-        ChatsAdapter chatsAdapter = new ChatsAdapter(chats, ChatsActivity.this);
 
         //Allows for the recyclerView to be scrolled
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
@@ -79,5 +98,13 @@ public class ChatsActivity extends AppCompatActivity {
             startActivity(settingsPage);
         }
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent leaveApp = new Intent(Intent.ACTION_MAIN);
+        leaveApp.addCategory(Intent.CATEGORY_HOME);
+        leaveApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(leaveApp);
     }
 }

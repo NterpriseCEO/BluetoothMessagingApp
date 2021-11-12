@@ -216,6 +216,7 @@ public class CameraActivity extends AppCompatActivity implements OnClickListener
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         save(bytes);
+                        System.out.println("poggers my dude, does this work at all?????????????? "+getIntent().getStringExtra("username"));
                         //Go to the image preview page
                         Intent gotToPreview = new Intent(CameraActivity.this, ConfirmProfileActivity.class);
                         gotToPreview.putExtra("username", getIntent().getStringExtra("username"));

@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <ImageView
-            android:id="@+id/profilePreview"
+            android:id="@+id/profilePicture"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:background="@drawable/circle"

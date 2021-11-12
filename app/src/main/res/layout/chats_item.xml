@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chats_item"
+    android:id="@+id/message"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -42,6 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_weight="1"
             android:background="@drawable/circle"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/no_user_icon" />
     </androidx.cardview.widget.CardView>
 
